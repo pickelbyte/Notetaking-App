@@ -9,7 +9,6 @@ def opengh():
 def main():
     global font
     root = tk.Tk()
-    root.geometry("360x200")
     root.title("Info")
     root.resizable(False, False)
 
