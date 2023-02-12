@@ -16,7 +16,7 @@ def openfile(x=None):
     global maintxt, root, currentfile
     try:
         try:
-            fork = open(fd.askopenfilename(), 'r')
+            fork = open(fd.askopenfilename(initialdir="~/Documents"), 'r')
             maintxt.delete(1.0, tk.END)
             maintxt.insert(tk.END, fork.read())
             root.title(f"Notetaker - {fork.name}")
@@ -45,7 +45,7 @@ def save(x=None):
     global maintxt, root, currentfile, issaved
     try:
         txt = maintxt.get(1.0, tk.END)
-        name = fd.asksaveasfile(parent=root, title="Save as...", defaultextension=".txt")
+        name = fd.asksaveasfile(parent=root, title="Save as...", defaultextension=".txt", initialdir="~/Documents")
         with open(name.name, 'w') as f:
             f.write(txt)
         root.title(f"Notetaker - {name.name}")
