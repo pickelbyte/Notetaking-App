@@ -7,6 +7,7 @@ import random
 import aboutwin
 
 currentfile = None
+issaved = True
 
 def donothing():
     pass
@@ -27,14 +28,21 @@ def openfile(x=None):
     return x
 
 def new(x=None):
-    global root, maintxt, currentfile
-    root.title("Notetaker - New Note")
-    maintxt.delete(1.0, tk.END)
-    currentfile = None
+    global root, maintxt, currentfile, issaved
+    if issaved is True:
+        pass
+    else:
+        response = msg.askokcancel(title="Unsaved Changes", message="All unsaved changes will be lost")
+        if response is True:
+            root.title("Notetaker - New Note")
+            maintxt.delete(1.0, tk.END)
+            currentfile = None
+        else:
+            pass
     return x
 
 def save(x=None):
-    global maintxt, root, currentfile
+    global maintxt, root, currentfile, issaved
     try:
         txt = maintxt.get(1.0, tk.END)
         name = fd.asksaveasfile(parent=root, title="Save as...", defaultextension=".txt")
@@ -42,21 +50,24 @@ def save(x=None):
             f.write(txt)
         root.title(f"Notetaker - {name.name}")
         currentfile = name.name
+        issaved = True
     except AttributeError:
         print("AttributeError")
 
     return x
 
 def checksaved(x=None):
-    global maintxt, root, currentfile
+    global maintxt, root, currentfile, issaved
     entrytxt = maintxt.get(1.0, tk.END)
     try:
         with open(currentfile, 'r') as f:
             filetxt = f.read()
 
         if entrytxt == filetxt:
+            issaved = True
             root.title(f"Notepad - {currentfile}")
         else:
+            issaved = False
             root.title(f"*Notepad - {currentfile}*")
     except TypeError:
         pass
@@ -92,9 +103,10 @@ def changefont():
 
 root = tk.Tk()
 root.geometry("720x480")
-root.title("Notetaker")
+root.title("Notetaker - New Note")
 
 fonts = list(font.families())
+fonts.sort()
 crfont = (random.choice(fonts), 12)
 
 menubar = tk.Menu(root)
